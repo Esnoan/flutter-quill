@@ -4,7 +4,12 @@
       "Bash(wc -l /d/Projects/_CoVet/flutter-quill/lib/src/**/*.dart)",
       "Bash(xargs grep:*)",
       "Bash(flutter test:*)",
-      "Bash(flutter analyze:*)"
+      "Bash(flutter analyze:*)",
+      "Bash(flutter pub:*)",
+      "Bash(flutter sdk-path:*)",
+      "Read(//d/Projects/_CoVet/flutter-quill/$\\(flutter sdk-path\\)/packages/flutter/lib/src/semantics/**)",
+      "Bash(flutter --version)",
+      "Bash(where flutter:*)"
     ]
   }
 }

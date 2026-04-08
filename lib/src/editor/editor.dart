@@ -341,7 +341,12 @@ class QuillEditorState extends State<QuillEditor>
         : child;
 
     if (config.excludeSemantics) {
-      editor = ExcludeSemantics(child: editor);
+      editor = Semantics(
+        textField: true,
+        multiline: true,
+        readOnly: controller.readOnly,
+        child: ExcludeSemantics(child: editor),
+      );
     }
 
     if (kIsWeb) {

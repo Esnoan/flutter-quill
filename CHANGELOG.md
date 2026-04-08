@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed typing and copy not working when `excludeSemantics: false` — the editor was not declared as a text field (`isTextField`) in the semantic tree, causing Flutter Web to skip text input routing and the clipboard to not detect selected text
+- Fixed typing and copy not working on Flutter Web when `ensureSemantics()` (or a platform accessibility service) is active — the editor now exposes a single focused text-field semantic node that gives Flutter Web a stable `<textarea>` for browser focus, preventing app-level semantic overlay elements from stealing focus from the TextInput channel
 
 ## [11.5.0] - 2025-10-18
 

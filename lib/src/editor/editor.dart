@@ -342,10 +342,15 @@ class QuillEditorState extends State<QuillEditor>
         : child;
 
     if (config.excludeSemantics) {
-      editor = Semantics(
-        textField: true,
-        multiline: true,
-        readOnly: controller.readOnly,
+      editor = ListenableBuilder(
+        listenable: widget.focusNode,
+        builder: (context, child) => Semantics(
+          textField: true,
+          multiline: true,
+          readOnly: controller.readOnly,
+          focused: widget.focusNode.hasFocus,
+          child: child!,
+        ),
         child: editor,
       );
     }
@@ -785,6 +790,17 @@ class RenderEditor extends RenderEditableContainerBox
     if (_excludeSemantics == value) return;
     _excludeSemantics = value;
     markNeedsSemanticsUpdate();
+  }
+
+  @override
+  void describeSemanticsConfiguration(SemanticsConfiguration config) {
+    // When excludeSemantics is active the outer Semantics(textField:true)
+    // widget in QuillEditorState handles the semantic declaration. Returning
+    // without calling super prevents RenderEditableContainerBox from adding
+    // an intermediate container node that would create an unnecessary DOM
+    // element between the textField node and its (empty) children.
+    if (_excludeSemantics) return;
+    super.describeSemanticsConfiguration(config);
   }
 
   @override

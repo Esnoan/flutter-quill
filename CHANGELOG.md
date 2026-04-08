@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added localization support for `mn` (Mongolian, Mongolia)
+- Added `excludeSemantics` option to `QuillEditorConfig` (defaults to `true`) to fix editor non-editability on Flutter Web when the host app has semantics enabled
 
 ## [11.5.0] - 2025-10-18
 

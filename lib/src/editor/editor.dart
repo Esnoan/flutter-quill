@@ -330,7 +330,7 @@ class QuillEditorState extends State<QuillEditor>
       ),
     );
 
-    final editor = selectionEnabled
+    Widget editor = selectionEnabled
         ? _selectionGestureDetectorBuilder.build(
             behavior: HitTestBehavior.translucent,
             detectWordBoundary: config.detectWordBoundary,
@@ -339,6 +339,10 @@ class QuillEditorState extends State<QuillEditor>
             quillMagnifierBuilder: config.quillMagnifierBuilder,
           )
         : child;
+
+    if (config.excludeSemantics) {
+      editor = ExcludeSemantics(child: editor);
+    }
 
     if (kIsWeb) {
       // Intercept RawKeyEvent on Web to prevent it from propagating to parents

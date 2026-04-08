@@ -86,10 +86,24 @@ class QuillEditorConfig {
     this.readOnlyMouseCursor = SystemMouseCursors.text,
     this.onPerformAction,
     @experimental this.customLeadingBlockBuilder,
+    this.excludeSemantics = true,
   });
 
   @experimental
   final LeadingBlockNodeBuilder? customLeadingBlockBuilder;
+
+  /// Whether to exclude the editor from the semantics tree.
+  ///
+  /// When `true`, wraps the editor in [ExcludeSemantics], preventing
+  /// Flutter from generating accessibility nodes for the editor's content.
+  ///
+  /// This is particularly useful on Flutter Web when the host app has
+  /// semantics enabled: Flutter generates HTML accessibility overlay nodes
+  /// that intercept pointer events, making the editor non-editable.
+  /// Setting this to `true` bypasses that overlay.
+  ///
+  /// Defaults to `true`.
+  final bool excludeSemantics;
 
   /// The text placeholder in the quill editor
   final String? placeholder;
@@ -531,6 +545,7 @@ class QuillEditorConfig {
     void Function()? onScribbleActivated,
     EdgeInsets? scribbleAreaInsets,
     void Function(TextInputAction action)? onPerformAction,
+    bool? excludeSemantics,
   }) {
     return QuillEditorConfig(
       customLeadingBlockBuilder:
@@ -600,6 +615,7 @@ class QuillEditorConfig {
       onScribbleActivated: onScribbleActivated ?? this.onScribbleActivated,
       scribbleAreaInsets: scribbleAreaInsets ?? this.scribbleAreaInsets,
       onPerformAction: onPerformAction ?? this.onPerformAction,
+      excludeSemantics: excludeSemantics ?? this.excludeSemantics,
     );
   }
 }

@@ -341,25 +341,14 @@ class QuillEditorState extends State<QuillEditor>
           )
         : child;
 
-    // When excludeSemantics is true, wrap the editor in a single focused
-    // text-field semantic node. This gives Flutter web one clean semantic
-    // <textarea> to give browser focus to, which activates the TextInput
-    // channel so typed characters reach QuillRawEditorState.updateEditingValue().
-    // RenderEditor itself is made transparent to semantics (describeSemanticsConfiguration
-    // is a no-op) and its children are suppressed (visitChildrenForSemantics is a no-op),
-    // so only this outer node appears in the semantic tree.
+    // When excludeSemantics is true, remove the editor entirely from the
+    // semantic tree. This prevents Flutter web from creating a competing
+    // semantic <textarea> DOM element that would steal browser focus from the
+    // TextInput editing element. Without any semantic nodes for the editor,
+    // the TextInput textarea retains browser focus and typed characters reach
+    // QuillRawEditorState.updateEditingValue() normally.
     if (config.excludeSemantics) {
-      editor = ListenableBuilder(
-        listenable: widget.focusNode,
-        builder: (context, child) => Semantics(
-          textField: true,
-          multiline: true,
-          readOnly: controller.readOnly,
-          focused: widget.focusNode.hasFocus,
-          child: child!,
-        ),
-        child: editor,
-      );
+      editor = ExcludeSemantics(child: editor);
     }
 
     if (kIsWeb) {

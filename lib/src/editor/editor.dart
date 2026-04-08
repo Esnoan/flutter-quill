@@ -792,6 +792,15 @@ class RenderEditor extends RenderEditableContainerBox
   void describeSemanticsConfiguration(SemanticsConfiguration config) {
     if (_excludeSemantics) return;
     super.describeSemanticsConfiguration(config);
+    // Declare this render object as a multiline text field so Flutter (especially
+    // on Web) connects it to the platform TextInput client. Without isTextField,
+    // the engine does not route typed characters to updateEditingValue() and the
+    // browser copy/paste mechanism cannot detect selected text.
+    config
+      ..isTextField = true
+      ..isMultiline = true
+      ..isFocused = _hasFocus
+      ..isEnabled = true;
   }
 
   @override

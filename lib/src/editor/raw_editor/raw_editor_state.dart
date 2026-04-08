@@ -437,12 +437,11 @@ class QuillRawEditorState extends EditorState
       child = _scribbleFocusable(
         CompositedTransformTarget(
           link: _toolbarLayerLink,
-          child: Semantics(
-            child: MouseRegion(
-              cursor: widget.config.readOnly
-                  ? widget.config.readOnlyMouseCursor
-                  : SystemMouseCursors.text,
-              child: QuillRawEditorMultiChildRenderObject(
+          child: MouseRegion(
+            cursor: widget.config.readOnly
+                ? widget.config.readOnlyMouseCursor
+                : SystemMouseCursors.text,
+            child: QuillRawEditorMultiChildRenderObject(
                 key: _editorKey,
                 document: doc,
                 selection: controller.selection,
@@ -463,7 +462,6 @@ class QuillRawEditorState extends EditorState
               ),
             ),
           ),
-        ),
       );
     }
     final constraints = widget.config.expands

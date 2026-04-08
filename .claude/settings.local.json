@@ -9,7 +9,8 @@
       "Bash(flutter sdk-path:*)",
       "Read(//d/Projects/_CoVet/flutter-quill/$\\(flutter sdk-path\\)/packages/flutter/lib/src/semantics/**)",
       "Bash(flutter --version)",
-      "Bash(where flutter:*)"
+      "Bash(where flutter:*)",
+      "Bash(find:*)"
     ]
   }
 }

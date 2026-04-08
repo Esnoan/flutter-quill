@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added localization support for `mn` (Mongolian, Mongolia)
 - Added `excludeSemantics` option to `QuillEditorConfig` (defaults to `true`) to fix editor non-editability on Flutter Web when the host app has semantics enabled
 
+### Fixed
+
+- Fixed typing and copy not working when `excludeSemantics: false` — the editor was not declared as a text field (`isTextField`) in the semantic tree, causing Flutter Web to skip text input routing and the clipboard to not detect selected text
+
 ## [11.5.0] - 2025-10-18
 
 ### Fixed

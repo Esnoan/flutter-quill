@@ -331,7 +331,7 @@ class QuillEditorState extends State<QuillEditor>
       ),
     );
 
-    final editor = selectionEnabled
+    var editor = selectionEnabled
         ? _selectionGestureDetectorBuilder.build(
             behavior: HitTestBehavior.translucent,
             detectWordBoundary: config.detectWordBoundary,
@@ -341,10 +341,26 @@ class QuillEditorState extends State<QuillEditor>
           )
         : child;
 
-    // When excludeSemantics is true, the textField semantic declaration is
-    // handled at the RenderEditor render-object level (describeSemanticsConfiguration),
-    // which properly connects to the active TextInput client so Flutter web
-    // routes character input and clipboard through the right <textarea> element.
+    // When excludeSemantics is true, wrap the editor in a single focused
+    // text-field semantic node. This gives Flutter web one clean semantic
+    // <textarea> to give browser focus to, which activates the TextInput
+    // channel so typed characters reach QuillRawEditorState.updateEditingValue().
+    // RenderEditor itself is made transparent to semantics (describeSemanticsConfiguration
+    // is a no-op) and its children are suppressed (visitChildrenForSemantics is a no-op),
+    // so only this outer node appears in the semantic tree.
+    if (config.excludeSemantics) {
+      editor = ListenableBuilder(
+        listenable: widget.focusNode,
+        builder: (context, child) => Semantics(
+          textField: true,
+          multiline: true,
+          readOnly: controller.readOnly,
+          focused: widget.focusNode.hasFocus,
+          child: child!,
+        ),
+        child: editor,
+      );
+    }
 
     if (kIsWeb) {
       // Intercept RawKeyEvent on Web to prevent it from propagating to parents
@@ -785,22 +801,8 @@ class RenderEditor extends RenderEditableContainerBox
 
   @override
   void describeSemanticsConfiguration(SemanticsConfiguration config) {
-    if (!_excludeSemantics) {
-      super.describeSemanticsConfiguration(config);
-      return;
-    }
-    // Declare this render object as a focused text field at the render-object
-    // level (not widget level) so Flutter web connects it to the active
-    // TextInput client. This mirrors how RenderEditable works in Flutter's
-    // built-in EditableText, allowing the engine to reuse the TextInput
-    // <textarea> for this semantic node instead of creating a competing DOM
-    // element that would steal browser focus and break character input and
-    // clipboard operations (Ctrl+C/V).
-    config
-      ..isTextField = true
-      ..isMultiline = true
-      ..isFocused = _hasFocus
-      ..isEnabled = true;
+    if (_excludeSemantics) return;
+    super.describeSemanticsConfiguration(config);
   }
 
   @override

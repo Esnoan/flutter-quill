@@ -72,6 +72,7 @@ class QuillRawEditorConfig {
     this.onPerformAction,
     @experimental this.customLeadingBuilder,
     this.quillMagnifierBuilder,
+    this.excludeSemantics = true,
   });
 
   /// Controls whether this editor has keyboard focus.
@@ -413,4 +414,8 @@ class QuillRawEditorConfig {
 
   /// Used to build the [QuillMagnifier] when long-pressing/dragging selection
   final QuillMagnifierBuilder? quillMagnifierBuilder;
+
+  /// Whether to exclude the editor's content nodes from the semantics tree.
+  /// See [QuillEditorConfig.excludeSemantics] for details.
+  final bool excludeSemantics;
 }

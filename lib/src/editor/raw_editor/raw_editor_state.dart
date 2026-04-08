@@ -426,6 +426,7 @@ class QuillRawEditorState extends EditorState
                     cursorController: _cursorCont,
                     floatingCursorDisabled:
                         widget.config.floatingCursorDisabled,
+                    excludeSemantics: widget.config.excludeSemantics,
                     children: _buildChildren(doc, context),
                   ),
                 ),
@@ -457,6 +458,7 @@ class QuillRawEditorState extends EditorState
                 padding: widget.config.padding,
                 maxContentWidth: widget.config.maxContentWidth,
                 floatingCursorDisabled: widget.config.floatingCursorDisabled,
+                excludeSemantics: widget.config.excludeSemantics,
                 children: _buildChildren(doc, context),
               ),
             ),

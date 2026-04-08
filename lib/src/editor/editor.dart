@@ -327,10 +327,11 @@ class QuillEditorState extends State<QuillEditor>
         readOnlyMouseCursor: config.readOnlyMouseCursor,
         textInputAction: config.textInputAction,
         onPerformAction: config.onPerformAction,
+        excludeSemantics: config.excludeSemantics,
       ),
     );
 
-    Widget editor = selectionEnabled
+    var editor = selectionEnabled
         ? _selectionGestureDetectorBuilder.build(
             behavior: HitTestBehavior.translucent,
             detectWordBoundary: config.detectWordBoundary,
@@ -345,7 +346,7 @@ class QuillEditorState extends State<QuillEditor>
         textField: true,
         multiline: true,
         readOnly: controller.readOnly,
-        child: ExcludeSemantics(child: editor),
+        child: editor,
       );
     }
 
@@ -689,12 +690,14 @@ class RenderEditor extends RenderEditableContainerBox
     required this.onSelectionCompleted,
     required super.scrollBottomInset,
     required this.floatingCursorDisabled,
+    bool excludeSemantics = false,
     ViewportOffset? offset,
     super.children,
     EdgeInsets floatingCursorAddedMargin =
         const EdgeInsets.fromLTRB(4, 4, 4, 5),
     double? maxContentWidth,
   })  : _hasFocus = hasFocus,
+        _excludeSemantics = excludeSemantics,
         _extendSelectionOrigin = selection,
         _startHandleLayerLink = startHandleLayerLink,
         _endHandleLayerLink = endHandleLayerLink,
@@ -711,6 +714,7 @@ class RenderEditor extends RenderEditableContainerBox
   Document document;
   TextSelection selection;
   bool _hasFocus = false;
+  bool _excludeSemantics;
   LayerLink _startHandleLayerLink;
   LayerLink _endHandleLayerLink;
 
@@ -775,6 +779,18 @@ class RenderEditor extends RenderEditableContainerBox
     }
     _hasFocus = h;
     markNeedsSemanticsUpdate();
+  }
+
+  void setExcludeSemantics(bool value) {
+    if (_excludeSemantics == value) return;
+    _excludeSemantics = value;
+    markNeedsSemanticsUpdate();
+  }
+
+  @override
+  void visitChildrenForSemantics(RenderObjectVisitor visitor) {
+    if (_excludeSemantics) return;
+    super.visitChildrenForSemantics(visitor);
   }
 
   Offset get _paintOffset => Offset(0, -(offset?.pixels ?? 0.0));

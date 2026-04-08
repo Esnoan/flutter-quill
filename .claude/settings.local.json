@@ -3,7 +3,8 @@
     "allow": [
       "Bash(wc -l /d/Projects/_CoVet/flutter-quill/lib/src/**/*.dart)",
       "Bash(xargs grep:*)",
-      "Bash(flutter test:*)"
+      "Bash(flutter test:*)",
+      "Bash(flutter analyze:*)"
     ]
   }
 }
